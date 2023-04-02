@@ -216,7 +216,7 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(int rootdev) {
     loc_t mov_point = iter;
     debug("mov_point=%p",mov_point);
     
-    insn new_mov = insn::new_immediate_movk(iter, rootdev, iter().rd(), 0);
+    insn new_mov = insn::new_immediate_movz(iter, rootdev, iter().rd(), 0);
     uint32_t mov_opcode = new_mov.opcode();
     patches.push_back({mov_point,&mov_opcode,4});
     
