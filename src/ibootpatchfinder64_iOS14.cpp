@@ -231,7 +231,7 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(int rootdev) {
     uint32_t opcode = branch.opcode();
     
     patches.push_back({cbz_point,&opcode,4});
-    patches.push_back({cbz_point-4,"\xD5\x03\x20\x1F" /* nop */,4});
+    patches.push_back({cbz_point-4,"\x1f\x20\x03\xd5" /* nop */,4});
 
     return patches;
 }
