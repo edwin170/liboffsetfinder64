@@ -1,0 +1,11 @@
+prefix=/tmp/Builder/Linux_x86_64_Release/out
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libirecovery
+Description: A library to communicate with iBoot/iBSS on iOS devices via USB
+Version: 1.0.1
+Libs: -L${libdir} -lirecovery-1.0
+Cflags: -I${includedir}
+Requires.private: libimobiledevice-glue-1.0 >= 1.0.0 libusb-1.0 >= 1.0.3

@@ -1,0 +1,12 @@
+prefix=/tmp/Builder/Linux_x86_64_Release/out
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libinsn
+Description: an instruction decoder/encoder for 64bit ARM
+
+Requires: libgeneral >= 41
+Version: 37
+Libs: -L${libdir} -linsn
+Cflags: -I${includedir}

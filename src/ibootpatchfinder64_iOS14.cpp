@@ -193,6 +193,22 @@ std::vector<patch> ibootpatchfinder64_iOS14::local_boot_patch(){
     return patches;
 }
 
+std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(const char *rootdev) {
+    std::vector<patch> patches;
+    loc_t rdstr = findstr("<dict><key>IOProviderClass</key><string>IOMedia</string><key>IOPropertyMatch</key><dict><key>Partition ID</key><integer>%u</integer></dict></dict>", true);
+    debug("rdstr=%p",rdstr);
+
+    std::string fmt = "<dict ID=\"0\"><key>IOProviderClass</key><string ID=\"1\">IOService</string><key>BSD Name</key><string ID=\"2\">%s</string></dict>";
+    size_t len = strlen(fmt.c_str()) + strlen("disk1s8");
+    char *newstr = (char *)malloc(len);
+
+    snprintf(newstr, len, fmt.c_str(), rootdev);
+
+    patches.push_back({rdstr,newstr,len});
+
+    return patches;
+}
+
 std::vector<patch> ibootpatchfinder64_iOS14::renamed_snapshot_patch(){
     std::vector<patch> patches;
 
