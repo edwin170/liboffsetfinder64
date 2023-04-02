@@ -216,7 +216,10 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(const char *rootdev) 
     loc_t cbz_point = iter;
     debug("cbz_point=%p",cbz_point);
     
-    patches.push_back({cbz_point,'',0});
+    insn branch(iter, insn::b, insn::st_immediate, iter().imm(), 0, 0, 0, 0);
+    uint32_t opcode = branch.opcode();
+    
+    patches.push_back({cbz_point,&opcode,4});
 
     return patches;
 }
