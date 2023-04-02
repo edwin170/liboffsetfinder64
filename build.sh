@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 which cmake >/dev/null
  if [[ "$?" -gt 0 ]]; then echo "[!] cmake not installed or not found, refusing to build!"; exit 1; fi
 which make >/dev/null
