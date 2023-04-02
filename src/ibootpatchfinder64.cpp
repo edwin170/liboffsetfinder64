@@ -161,7 +161,7 @@ std::vector<patch> ibootpatchfinder64::local_boot_patch(){
     reterror("not implemented by provider");
 }
 
-std::vector<patch> ibootpatchfinder64::rootdev_patch(const char *rootdev) {
+std::vector<patch> ibootpatchfinder64::rootdev_patch(int rootdev) {
     reterror("not implemented by provider");
 }
 

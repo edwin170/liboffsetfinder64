@@ -111,7 +111,7 @@ namespace tihmstar {
             /*
                 root device
             */
-            virtual std::vector<patch> rootdev_patch(const char *rootdev);
+            virtual std::vector<patch> rootdev_patch(int rootdev);
             
             /*
                 change snapshot name
