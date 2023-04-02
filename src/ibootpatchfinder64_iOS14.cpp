@@ -199,12 +199,24 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(const char *rootdev) 
     debug("rdstr=%p",rdstr);
 
     std::string fmt = "<dict ID=\"0\"><key>IOProviderClass</key><string ID=\"1\">IOService</string><key>BSD Name</key><string ID=\"2\">%s</string></dict>";
-    size_t len = strlen(fmt.c_str()) + strlen("disk1s8");
+    size_t len = strlen(fmt.c_str()) + strlen(rootdev);
     char *newstr = (char *)malloc(len);
 
     snprintf(newstr, len, fmt.c_str(), rootdev);
 
     patches.push_back({rdstr,newstr,len});
+    
+    loc_t rdrefstr = find_literal_ref(rdstr);
+    debug("rdrefstr=%p",rdrefstr);
+    
+    vmem iter(*_vmem, rdrefstr);
+    
+    while (--iter != insn::cbz);
+    
+    loc_t cbz_point = iter;
+    debug("cbz_point=%p",cbz_point);
+    
+    patches.push_back({cbz_point,'',0});
 
     return patches;
 }
