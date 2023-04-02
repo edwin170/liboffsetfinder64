@@ -193,13 +193,13 @@ std::vector<patch> ibootpatchfinder64_iOS14::local_boot_patch(){
     return patches;
 }
 
-std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(const char *rootdev) {
+std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(int rootdev) {
     std::vector<patch> patches;
     loc_t rdstr = findstr("<dict><key>IOProviderClass</key><string>IOMedia</string><key>IOPropertyMatch</key><dict><key>Partition ID</key><integer>%u</integer></dict></dict>", true);
     debug("rdstr=%p",rdstr);
 
-    std::string fmt = "<dict ID=\"0\"><key>IOProviderClass</key><string ID=\"1\">IOService</string><key>BSD Name</key><string ID=\"2\">%s</string></dict>";
-    size_t len = strlen(fmt.c_str()) + strlen(rootdev);
+    std::string fmt = "<dict ID=\"0\"><key>IOProviderClass</key><string ID=\"1\">IOService</string><key>BSD Name</key><string ID=\"2\">disk0s1s%u</string></dict>";
+    size_t len = strlen(fmt.c_str()) + strlen("disk0s1s10"); // just incase
     char *newstr = (char *)malloc(len);
 
     snprintf(newstr, len, fmt.c_str(), rootdev);
@@ -211,15 +211,25 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(const char *rootdev) 
     
     vmem iter(*_vmem, rdrefstr);
     
+    while (--iter != insn::mov);
+    
+    loc_t mov_point = iter;
+    debug("mov_point=%p",mov_point);
+    
+    insn new_mov = insn::new_immediate_movk(iter, rootdev, iter().rd(), 0);
+    uint32_t mov_opcode = new_mov.opcode();
+    patches.push_back({mov_point,&mov_opcode,4});
+    
     while (--iter != insn::cbz);
     
     loc_t cbz_point = iter;
     debug("cbz_point=%p",cbz_point);
     
-    insn branch(iter, insn::b, insn::st_immediate, iter().imm(), 0, 0, 0, 0);
+    insn branch = insn::new_immediate_b(iter, iter().imm());
     uint32_t opcode = branch.opcode();
     
     patches.push_back({cbz_point,&opcode,4});
+    patches.push_back({cbz_point-4,"\xD5\x03\x20\x1F" /* nop */,4);
 
     return patches;
 }
