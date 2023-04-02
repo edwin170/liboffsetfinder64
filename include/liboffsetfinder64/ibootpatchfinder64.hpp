@@ -107,6 +107,11 @@ namespace tihmstar {
                 local boot
             */
             virtual std::vector<patch> local_boot_patch();
+
+            /*
+                root device
+            */
+            virtual std::vector<patch> rootdev_patch(const char *rootdev);
             
             /*
                 change snapshot name
