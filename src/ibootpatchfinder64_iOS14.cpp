@@ -220,9 +220,11 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(int rootdev) {
     uint32_t mov_opcode = new_mov.opcode();
     patches.push_back({mov_point,&mov_opcode,4});
     
-    while (--iter != insn::cbz);
+    vmem iter2(*_vmem, rdrefstr);
     
-    loc_t cbz_point = iter;
+    while (--iter2 != insn::cbz);
+    
+    loc_t cbz_point = iter2;
     debug("cbz_point=%p",cbz_point);
     
     insn branch = insn::new_immediate_b(iter, iter().imm());
