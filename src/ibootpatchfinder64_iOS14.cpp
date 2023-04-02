@@ -211,7 +211,7 @@ std::vector<patch> ibootpatchfinder64_iOS14::rootdev_patch(int rootdev) {
     
     vmem iter(*_vmem, rdrefstr);
     
-    while (--iter != insn::mov);
+    while (--iter != insn::movz);
     
     loc_t mov_point = iter;
     debug("mov_point=%p",mov_point);
